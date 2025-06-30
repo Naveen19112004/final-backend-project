@@ -147,3 +147,7 @@ one problem here is that.env uses the require syntax we have solution for this a
 and we used type:module in package.json
 
 now create controllers ,db,routes,models,utils files in the src folder
+
+now npm i _D prettier
+create file .prettierrc in root dir
+.prettierignore also to ignore the files which should not use prettier
