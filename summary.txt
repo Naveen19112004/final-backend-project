@@ -87,3 +87,61 @@ const subtodos=new mongoose.Schema({
     }
 },timestamps:true)
 export const SubTodo=mongoose.model("Subtodo",subtodos)
+
+
+real time project started here
+new repository in git final-backend-project
+npm init
+
+here i added puclic folder inside thst temp folder also 
+now i tried using [git status-> it shows there are no change to commit ]
+
+then i created .gitkeep file inside the temp folder then git status 
+then it shows that you need to commit some file public folder 
+actually keeping the track of empty folder is useless and when i added file to it ,it shows on the git ststus to be commited
+
+creating .gitnore just ouside the publicnfoder
+there are some files to be ignored to push into the git ,
+for that there gitignore generator in the google
+search gitignore generator->gitignore.io->node->copy->paste
+
+now create .env file->environment variables are picked up fromthe systems so
+thst they are secure,they are not picked up from the file,
+so as soon as ur code goes to production,there also on those services you get the fields of env variables
+
+so if you push .env to git hub ,it gives you error(warning),
+so we create .env.sample file
+whatever work done by.env will also done by .env.sample for just to gve it github as that file is not added to .gitignore file
+
+now inside root one more folder
+src 
+whatever work we have or whhatever our files are, we will keep them inside that,
+now when we go inside the source,we will need2-3 files,that is
+easiest to cretae these files is that ,u can by right clicking
+app.js
+constants.js
+index.js
+
+and i need to update te package.json filelike to import the files we have 2 types in backend'
+1. requrie syntax
+2. import (module)
+
+nodemon
+to restart the server
+go to package.json file and modify
+"test": "echo \"Error: no test specified\" && exit 1" this to
+"dev": "nodemon src/index.js"
+When you add this in your package.json:
+"scripts": {
+  "dev": "nodemon index.js"
+}
+You’re telling npm:
+"Whenever someone runs npm run dev, execute the command nodemon index.js."
+So now, instead of manually typing:
+nodemon index.js
+You just type:
+npm run dev
+And npm runs that command for you, as defined in the "scripts" section.
+
+one problem here is that.env uses the require syntax we have solution for this as well,we will discuss
+and we used type:module in package.json
