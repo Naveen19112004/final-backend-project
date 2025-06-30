@@ -145,3 +145,5 @@ And npm runs that command for you, as defined in the "scripts" section.
 
 one problem here is that.env uses the require syntax we have solution for this as well,we will discuss
 and we used type:module in package.json
+
+now create controllers ,db,routes,models,utils files in the src folder
