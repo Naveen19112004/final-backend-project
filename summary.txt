@@ -1,0 +1,89 @@
+npm i mongoose
+✅ It installs Mongoose into your project, so you can:
+Connect your app to a MongoDB database
+Define schemas and models
+Perform database operations (like save, find, update, delete) in a structured way
+🧠 Why use Mongoose?
+Without Mongoose,
+db.collection('users').insertOne({ name: "Naveen", age: 22 });
+with mongoose
+const user = new User({ name: "Naveen", age: 22 });
+await user.save();
+
+user.model.js ->standard practise
+import mongoose from 'mongoose';
+const UserSchema=new mongoose.Schema({
+    username:String,
+    email:String,
+    isActive:Bolean
+})
+//latest
+const UserSchema=new mongoose.Schema({
+    {
+        username:{
+            type:String,
+            requried:true,
+            unique:true,
+            lowercase:true
+        },
+        email:{
+            type:Strin,g
+            required:true,
+            unique:true,
+            lowercase:true
+        },
+        password:{
+            type:String,
+            required:[true,"password is req"]
+        }
+    }
+},{timestamps:true}
+);
+// this schema is created on inside the mongoDB
+if we are not exporting it creation of schema doesnot work
+//export const User=mongoose.model("User",userScehma) 
+mongoose.mode("which model",on which basis we need to make model)
+
+
+
+import mongoose from 'mongoose';
+const todoschema=new monngoose.Schema({
+content:{
+    type:String,
+    required:true,
+
+},
+complete:{
+    type:Boolean,
+    default:false
+},
+createdBy:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"User"
+}
+subTodos:[
+    {
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"subtodos"
+}],//arrray of subtodos
+})
+export const Todo=mongoose.model("Todo",todoschema)
+
+
+import mongoose from 'mongoose';
+const subtodos=new mongoose.Schema({
+    content:{
+        type:Stringg,
+        required:true,
+
+    },
+    complete:{
+        type:Boolean,
+        default:false
+    }
+    createdByy:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User"
+    }
+},timestamps:true)
+export const SubTodo=mongoose.model("Subtodo",subtodos)
