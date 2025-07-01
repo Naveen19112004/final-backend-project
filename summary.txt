@@ -151,3 +151,168 @@ now create controllers ,db,routes,models,utils files in the src folder
 now npm i _D prettier
 create file .prettierrc in root dir
 .prettierignore also to ignore the files which should not use prettier
+
+✅ What is Prettier?
+Prettier is a code formatter that:
+Automatically formats your code
+Enforces consistent style (indentation, spacing, quotes, semicolons, etc.)
+Removes unnecessary code clutter (e.g., extra spaces, bad indentation)
+
+What is .prettierrc?
+It’s a configuration file (usually in JSON format) where you define how Prettier should format your code project-wide.
+
+✅ Why create .prettierrc in the root?
+Customizes formatting rules for your project
+For example, you can define:
+{
+  "semi": true,
+  "singleQuote": true,
+  "tabWidth": 2
+}
+This makes sure:
+Every statement ends with a semicolon
+Single quotes are used instead of double
+Tabs are 2 spaces wide
+
+.prettierignore	Tells Prettier which files to skip
+ Example .prettierignore file:
+plaintext
+node_modules
+dist
+build
+package-lock.json
+.env
+coverage
+*.min.js
+public/*
+This tells Prettier:
+Don't format any files or folders listed here.
+Patterns (like *.min.js) also work.
+ What is .prettierignore?
+Just like .gitignore, the .prettierignore file tells Prettier to ignore certain files or folders — it will not format anything you list here.
+
+connecting db 
+google search ->mongodb atlas->MongoDB Atlas | The Modern, Multi-Cloud Database
+sign in->create project->project-name(my-project)->free select->aws->cluster0->create deployment->what will it do,mongodb behind the scenes is going to aws and ur
+db will be there,all its softwares,whatever is the req,the connections string that needs to be created,all of them will b created automatically
+all that has been created ,now we need a connection,so mongodb has been created it, ialso want to connect it to the database
+so for that ,a username and password will be required so give them there->crete 
+then go to network access
+to enter into the mongodb we have 2 formats
+1.ip address should be allowed so that you can accee=ss
+2.or you should have correct id password
+3.one should have url
+
+so add ip address 
+go to network access->add ip address
+if our app is running on aws or digital ocean then in the production grade settings,we never allow acess from anywhere ,in some cases if it has to be done for testing 
+or if w e want to see smthg ,then we will allow some ips.It
+i choosed allow acess from any as it is my acc
+acess entry:0.0.0.0/0 comment:allow all acess:CAUTION
+
+db access
+create username and pass 
+naveen
+Nn11@gmail.com
+readandwrite any db and crete it
+ and now i go db inside
+ for coneccting db we have diffrent options
+ 1. we go with the string url given int he compass ->copy that->
+ for connecting db 
+ first go to .env file
+ update PORT=8000
+ MONGO_URI=mongodb+srv://naveen:Nn11@gmail.com@cluster0.bdlolow.mongodb.net/
+ i am pasting it in env.sample file also by the time you see it i ll change the all the things so you can acess it
+ 
+
+ now going to constants.js and wtite export const DB_NAME="videotube"
+ this isnot the system relate var but it belongs to the applicatiopn variable that is reason i hav eput it in constats
+
+ db connection can be done in2 to 3 wways
+ 2 major
+ 1.one approach is that what should we do is that all the code 
+we are going to execute the index file first through node or nodemon through 
+so i keep all my code in index file so as soon as index file is loaded,the code of db connection in the function that i have written ,i shouldget 
+it exuxexcuted immediately
+2.i will create a folder in the name of DB and write my function of connection inside it and then import that func in myindex and get it executed there
+we follw 2nd one
+how to connect
+app->express ke through
+db connection->mongoose ke throough
+ can db connect in one line 
+ yes ,but that is not the professional approach
+
+ we take firdst approach now,
+ open index.js
+ import mongoose from 'mongoose';
+ import {DB_NAME} from "./constants";
+ import express from "express";
+ const app=express();
+ function DBconnet(){}
+ DBconnect()
+ there is nothing wrong in this app but not professional
+ ()()->IIFE concept in js
+ (async()=>{
+    try{
+        await mongoose.connect(`${process.env.MONGODB_URI }/${DB_NAME}`)
+        app.on(("error"),(error)=>{
+            console.log("ERR");
+            throw error
+        }
+        )
+        app.listen(process.env.PORT,()=>{
+            console.log(`APP is listening on the port ${process.env.PORT}`)
+        })
+    }
+    catch(error){
+        console.error("ERROR: "error)
+        throw err
+    }
+ })()
+
+ 🧩 But what is this part for?
+🔹 app.on("error", ...)
+This listens for Express app errors — like if something goes wrong while handling a request or starting the server.
+This is not related to MongoDB.
+It's optional, but useful for catching runtime issues in the Express server.
+🔹 app.listen(...)
+This is the part that starts your Express server.
+💡 So, your app won't respond to any HTTP request (like GET /, POST /login) unless you call app.listen(...).
+
+📊 So why are both used together?
+Because in a real application, you want to:
+Connect to the database
+Only start the server if the DB connection is successful
+Handle app-level errors gracefully
+✅ Real-Life Analogy:
+Imagine you're opening a restaurant:
+mongoose.connect(...) = Getting your kitchen ready (connecting to DB)
+app.listen(...) = Opening the front door for customers (start the server)
+app.on("error") = Being ready if something goes wrong in the restaurant (e.g. power cut, customer issue)
+ 
+
+ this is the first app
+
+ for the second app
+ i am creating index.js in db folder which is under src folder
+ import mongoose fom 'mongoose';
+ import {DB_NAME} from "./constants";
+ import connectDB from "./db/index";
+ require('dotenv').config({path:'./env'}) or import dotenv form"dotenv" then dotenv.config({
+    path:'./env'
+ })
+ //db in another continent he is sayning y>
+ const connectDB=async(=>{
+    try{
+    const connectionINStance= awiat mongoose.connect(`${process.env.MONGODB_URI}/${DB_NAME}`)
+    console.log(`\n MOngo connected! DB HOST:${connectionInstance.connection.host});
+    }
+    catch(error){
+        console.log("monddb coneccction error",errr);
+        process.exit(1); 
+    }
+ })
+ export default connectDB
+
+ so now i can directly write import connectDB from "./db"
+ connectDB( )
