@@ -316,3 +316,244 @@ app.on("error") = Being ready if something goes wrong in the restaurant (e.g. po
 
  so now i can directly write import connectDB from "./db"
  connectDB( )
+
+ connection to db is done
+9 th lecture
+ now open app.js
+ import express from 'express'
+ const app=express();
+ request params.whenvere any data comes from the url,it mostly
+ comes from request params called params
+ many times we see inside the url ,there is ?,search equals and then any term,we understan
+ d how all those parameters are handled
+ in requestt params you will find one req body,so what
+is in the req body, the data can come in diffreernt wwayscan come from in froms,it can come
+in json ,so for that also we have to do some activites
+one thing is that sometimes you will also get  
+data from cookies. 
+ins cookie-parser?
+why and all we discuss 
+and also cors ->app.use
+whenever you are using middleware,most of the time you do it through app.use
+npm install cookie-parser cors
+so import thenm in app.js
+import express from 'express'
+import cors from "cors";
+import cookieParser from "cookie-parser";
+const app=express();
+export {app} 
+if we want to import cookie-parser 
+ app.use(cors({
+    origin:process.env.CORS_ORIGIN,
+    credentials:true;
+ }))
+ in .env
+ CORS_ORIGIN=* which means ,req coming from anywhere will be accepted obviously
+ like from vercel ,someone else
+
+ app.use->configuration i need to set ->middle ware ineed to set
+ y?those has to be done
+ what is middleware?
+ with express u can directly configure json in such a way that
+ i am acceting json by app.use(express.json())
+ further options inside that is limit i.e howmuch limit that you want to use
+ app.use(express.json({limit:"16kb"}))
+ earlier express not able accept our json files
+ there you have to use body parser to accept those files
+
+
+ when we filll the form ,then we took the dat,now i have to configure
+ one more thing that when i geet  the data from the url thattoo is required 
+ now when the data comes from the url then there is  a issue,
+ like in our link smthg will be added like %20 smthg like that 
+ all this also has to be told to the express that look the data will come
+ from there also ,so please uns=derstand that,
+ a configuration has to be done for that so i have to use app.use(express.urlencoded({
+    extended:true;,limit:"16kb"
+ }))
+ final configuration is
+ app.use(express.static)//files,folders,pdf stores
+ if i want to store them in my own  server then i create a public folder
+ and some public assests which anyone can access them
+ name is publisc so
+ app.use(express.static("public"))
+ one thing we have not done yet 
+ cookie-parser?
+ its work is just that i can acess the cookies in the
+ users browser from my server and also be able to set its cookies,
+ so basically i can do crud operations
+ so app.use(cookieParser())
+ middleware?
+ for example if the client accesing or hit the url /instgram
+ if someone comes to this url ,i say iot it that what it should happen
+ that is (req,res) res.send("hitesh")
+ first a url req came to means
+ and handled it and sent it but i want to get some process
+ done because a lot of requests will come on the url,you are capable
+ of receiving that response or not,it may be that you
+have not logged in ,so someone has to check has to be done in between ,that checking in between 
+is called middleware
+(err,req,res,next)
+here next is mw which is a flag that look my work
+is done,now go to next so it will go to this
+it is also necessary to use next becaue if there is no flag how wie will pass to next
+
+
+so now we make utility foder in that we creare a he;per fn which heps to deal with try catck api error handling 
+\
+
+
+9th Lecture Notes: Express App Setup, Middleware, and Request Handling
+1. Opening app.js and setting up Express
+js
+Copy
+Edit
+import express from 'express';
+const app = express();
+2. Request Params and Request Body
+Request params: Whenever any data comes from the URL, it mostly comes through request params, accessible via req.params.
+
+Many times, inside the URL, we see queries like ?search=term. These are query parameters and can be accessed using req.query.
+
+In request params, you will also find req.body.
+
+3. What is in req.body?
+Data can come in different ways:
+
+From forms (usually URL-encoded)
+
+From JSON payloads
+
+To handle these properly, Express requires middleware configuration (explained below).
+
+4. Data from Cookies
+Sometimes you will get data from cookies.
+
+To work with cookies in Express, we use the cookie-parser package.
+
+Cookie-parser allows you to read cookies from the user's browser and also set cookies via your server.
+
+This enables CRUD operations on cookies.
+
+5. CORS (Cross-Origin Resource Sharing)
+When the frontend and backend are on different origins (domains, ports, etc.), CORS issues occur.
+
+To handle CORS, use the cors middleware.
+
+Example:
+
+js
+Copy
+Edit
+app.use(cors({
+  origin: process.env.CORS_ORIGIN,
+  credentials: true,
+}));
+In .env file, CORS_ORIGIN=* means requests from anywhere will be accepted (use carefully in production).
+
+6. Middleware and app.use()
+Middleware is a function that runs between the request and the response.
+
+Most middleware is set up using app.use().
+
+For example, to parse JSON in incoming requests:
+
+js
+Copy
+Edit
+app.use(express.json());
+You can configure middleware further with options:
+
+js
+Copy
+Edit
+app.use(express.json({ limit: "16kb" }));
+Earlier versions of Express could not parse JSON directly; they required a separate package called body-parser.
+
+7. Handling URL-Encoded Data (Forms)
+When forms send data, it’s usually URL-encoded.
+
+Express needs to be configured to parse this:
+
+js
+Copy
+Edit
+app.use(express.urlencoded({
+  extended: true,
+  limit: "16kb"
+}));
+The option extended: true allows for rich objects and arrays to be encoded into the URL-encoded format.
+
+8. Serving Static Files
+If you want to serve files like images, PDFs, or other public assets from your own server, create a folder called public.
+
+Use Express middleware to serve files from that folder:
+
+js
+Copy
+Edit
+app.use(express.static("public"));
+Files in public become accessible publicly via URLs.
+
+9. Using cookie-parser
+To work with cookies in Express, import and use the middleware:
+
+js
+Copy
+Edit
+import cookieParser from 'cookie-parser';
+app.use(cookieParser());
+This middleware parses cookies attached to the client request object, making it easy to read and set cookies.
+
+10. What is Middleware?
+Middleware functions can process requests before they reach the route handler.
+
+Example: If a client accesses /instagram, middleware can check if the user is logged in.
+
+Signature:
+
+js
+Copy
+Edit
+(req, res, next) => { /* ... */ }
+next() is a flag to pass control to the next middleware or route handler.
+
+Without calling next(), the request will not proceed further and may hang.
+
+11. Middleware with Error Handling
+Error-handling middleware has this signature:
+
+js
+Copy
+Edit
+(err, req, res, next) => { /* ... */ }
+Use next(err) to pass errors to error middleware.
+
+Middleware can be stacked in sequence to handle multiple tasks like authentication, logging, etc.
+
+12. Practical Example of Middleware Flow
+Client sends request → Middleware 1 runs → Middleware 2 runs → Route handler runs → Response sent
+
+Middleware can intercept requests for:
+
+Authentication
+
+Logging
+
+Validation
+
+Error handling
+
+13. Utility Folder and Helper Function
+To handle API errors in a clean way, create a utility folder.
+
+Inside it, create a helper function for try-catch error handling in async functions.
+
+This prevents code repetition and helps centralize error management.
+
+ Additional Points:
+Always keep your middleware order in mind. For example, cors() and cookie-parser() should come before route handlers.
+Use environment variables to configure origins and sensitive settings.
+Limit request size to avoid denial of service attacks via large payloads.
+Use HTTPS in production to secure cookies and data.
+

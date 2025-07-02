@@ -1,0 +1,124 @@
+app.use(express.json({ limit: "16kb" })); this means 
+that the data coming in json format must be in 16 kb size right? and also middleware is checking that
+the data coming in json format must be in 16 kb size right
+ChatGPT said:
+Yes, you're correct.
+app.use(express.json({ limit: "16kb" }));
+Meaning:
+It tells Express to accept JSON payloads only if their size is ≤ 16 KB.
+If the incoming JSON data exceeds 16 KB, the middleware will automatically reject the request with an error (usually 413 Payload Too Large).
+
+13. Utility Folder and Helper Function
+To handle API errors in a clean way, create a utility folder.
+
+Inside it, create a helper function for try-catch error handling in async functions.
+
+This prevents code repetition and helps centralize error management.
+"Custom API response means that when the client sends data to the server,
+ we handle it (often using middleware), and depending on the input, we send
+  a structured and meaningful response back to the client. For this, we define custom API responses and error formats instead of relying on default ones."
+
+
+we create asynchandler file in utils folder
+we create a method
+const aynchandler=()=>{}
+then export {asynchandler}
+or we can use promises
+try catch can also be implemented
+we do both
+const asynchandler=()=>{}
+higher order functions
+can accept fns as a parameter or return them
+they work as a variable
+so what we do.we accept a fn
+we have accepted in our parameter and i hav eto execute this fn
+const asynchandler=(fn)=>()=>{}
+step by stepfor above one
+const asynchandler=()=>{}
+const aynchandlwer=(func)=>async if you want it to be async()=>{}
+
+
+const asynchandler=(fn)=>async(err,req,res,next)=>{
+  try{
+      await fn(req,res,next)
+  }
+  catch(error){
+    res.status(err.code|| 500).json({
+      success:false,
+      messege:err.messege
+    })
+  }
+}
+
+promises
+
+const asynchandler=(requesthandler)=>{
+  return (req,res,next)=>{
+    Promise.resolve(requesthandler(req,res,next)).catch((error)=>next(error))
+  }
+}
+node js api error 
+we have class in this which are many to handle types of errors
+
+Apierror.js
+This ApiError class is a custom error class.
+ It helps you throw errors in a clean, structured, and consistent way — 
+ so that all errors in your app follow the same shape and are easier to debug or handle.
+ We are using this:
+if (!user) {
+    throw new ApiError(404, "User not found");
+}
+instead of manually writing:
+if (!user) {
+    return res.status(404).json({
+        statusCode: 404,
+        message: "User not found",
+        data: null,
+        success: false,
+        errors: []
+    });
+}
+class ApiError extends Error {
+    constructor(
+        statusCode,
+        message = "An error",
+        errors = [],
+        stack = ""
+    ) {
+        super(message); // Call parent class Error with message
+
+        this.statusCode = statusCode;
+        this.data = null;
+        this.message = message; // ← fixed typo here
+        this.success = false;
+        this.errors = errors;
+
+        if (stack) {
+            this.stack = stack;
+        } else {
+            Error.captureStackTrace(this, this.constructor);
+        }
+    }
+}
+
+export { ApiError };
+
+
+//Apiresponse.js
+The ApiResponse class is a custom response
+ wrapper for your API endpoints. It creates a consistent and 
+ structured format for sending responses from your backend to the frontend.
+ Instead of writing:
+res.status(200).json({ statusCode: 200, data: ..., message: ..., success: true });
+every time, you just do:
+res.status(200).json(new ApiResponse(200, yourData));
+class ApiResponse {
+    constructor(statusCode, data, message = "Success") {
+        this.statusCode = statusCode;
+        this.data = data;
+        this.message = message;
+        this.success = statusCode < 400;
+    }
+}
+
+export default ApiResponse;
