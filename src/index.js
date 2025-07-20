@@ -30,24 +30,46 @@ const app = express();
 })();*/
 // src/index.js
 // 2nd approach in which connectdb is called from the src/db/index
-import express from 'express';
-import dotenv from 'dotenv';
-import connectDB from './db/index.js'; // Path to your db file
-import { DB_NAME } from './constants.js';
 
+import dotenv from 'dotenv';
 dotenv.config({ path: './.env' });
 
-const app = express();
+import connectDB from './db/index.js'; // Your DB connection file
+import { app } from './app.js'; // Import the app instance from app.js
+
+const PORT = process.env.PORT || 8000;
 
 (async () => {
   try {
     await connectDB();
 
-    app.listen(process.env.PORT, () => {
-      console.log(`🚀 Server is running on port ${process.env.PORT}`);
+    app.listen(PORT, () => {
+      console.log(`🚀 Server is running on port ${PORT}`);
     });
 
   } catch (err) {
     console.error("❌ Application failed to start:", err);
   }
 })();
+
+
+// import { app } from './app.js';
+
+// const PORT = process.env.PORT || 8000;
+
+// app.listen(PORT, () => {
+//   console.log(`Server running at http://localhost:${PORT}`);
+// });
+
+// import express from  'express';
+// const app = express();
+
+
+// app.get('/',(req,res)=>{
+//     res.send('hjk');
+// })
+
+
+// app.listen(5000,()=>{
+//     console.log(`port is running at 5000`)
+// })

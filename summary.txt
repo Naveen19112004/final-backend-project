@@ -557,3 +557,46 @@ Use environment variables to configure origins and sensitive settings.
 Limit request size to avoid denial of service attacks via large payloads.
 Use HTTPS in production to secure cookies and data.
 
+---
+# Required Changes for User Registration Endpoint
+
+## 1. Postman/Form-data Setup
+- Use POST to http://localhost:8000/api/v1/user/register
+- Body type: form-data
+- Keys (case-sensitive):
+  - fullname (Text)
+  - email (Text)
+  - username (Text)   <-- REQUIRED
+  - password (Text)
+  - avatar (File)
+  - coverImage (File, optional)
+
+## 2. Multer Middleware
+- src/middlewares/multer.mw.js already exports `upload`.
+- Route uses:
+```js
+upload.fields([
+  { name: "avatar", maxCount: 1 },
+  { name: "coverImage", maxCount: 1 },
+])
+```
+
+## 3. .env and Cloudinary
+- Ensure .env contains:
+  - CLOUDINARY_CLOUD_NAME=your_cloud_name
+  - CLOUDINARY_API_KEY=your_api_key
+  - CLOUDINARY_API_SECRET=your_api_secret
+- dotenv is loaded at the top of src/utils/cloudinary.js
+
+## 4. Restart Server
+- Always restart after .env or code changes.
+
+## 5. User Model
+- username, fullName, email, password are required in DB.
+
+---
+# Troubleshooting
+- If you see "All fields are mandatory", check for missing or misspelled fields in Postman.
+- If you see Cloudinary config errors, check .env and dotenv loading.
+- If you see multer errors, check field names and middleware usage.
+
